@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +7,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Substitui o placeholder pela senha da variável de ambiente
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var finalConnectionString = rawConnectionString?.Replace("{DB_PASSWORD}", dbPassword);
+
+// Exemplo usando Entity Framework Core + MySQL (Pomelo)
+builder.Services.AddDbContext<DbContext>(options =>
+    options.UseMySql(finalConnectionString, ServerVersion.AutoDetect(finalConnectionString)));
+
 
 var app = builder.Build();
 
@@ -16,30 +29,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+
+app.UseHttpsRedirection();
 
 app.MapGet("/", () =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+
+    return "null";
+});
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
