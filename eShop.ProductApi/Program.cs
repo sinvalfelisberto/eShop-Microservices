@@ -1,4 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
+using MySqlConnector;
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,13 +14,24 @@ builder.Services.AddSwaggerGen();
 
 var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Substitui o placeholder pela senha da variável de ambiente
-var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
-var finalConnectionString = rawConnectionString?.Replace("{DB_PASSWORD}", dbPassword);
+var dbHost = Environment.GetEnvironmentVariable("MYSQL_HOST");
+var dbPort = Environment.GetEnvironmentVariable("MYSQL_PORT");
+var dbName = Environment.GetEnvironmentVariable("MYSQL_DATABASE");
+var dbUser = Environment.GetEnvironmentVariable("MYSQL_USER");
+var dbPassword = Environment.GetEnvironmentVariable("MYSQL_PASSWORD");
+
+var finalConnectionString = rawConnectionString?
+    .Replace("{MYSQL_DATABASE}", dbName)
+    .Replace("{MYSQL_USER}", dbUser)
+    .Replace("{MYSQL_PASSWORD}", dbPassword)
+    .Replace("{MYSQL_HOST}", dbHost)
+    .Replace("{MYSQL_PORT}", dbPort);
+
 
 // Exemplo usando Entity Framework Core + MySQL (Pomelo)
 builder.Services.AddDbContext<DbContext>(options =>
     options.UseMySql(finalConnectionString, ServerVersion.AutoDetect(finalConnectionString)));
+
 
 
 var app = builder.Build();
@@ -29,14 +44,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+var pass = Environment.GetEnvironmentVariable("MYSQL_PASSWORD") ?? "Não encontrei essa senha!";
 
 app.UseHttpsRedirection();
 
 app.MapGet("/", () =>
 {
 
-    return "null";
+    return $"Eu estou funcionando, e direito! StringConnection: {finalConnectionString}";
 });
 
 app.Run();
+
