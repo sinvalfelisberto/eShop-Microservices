@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using MySqlConnector;
+using eShop.ProductApi.Context;
 
 Env.Load();
 
@@ -28,15 +29,13 @@ var finalConnectionString = rawConnectionString?
     .Replace("{MYSQL_PORT}", dbPort);
 
 
-// Exemplo usando Entity Framework Core + MySQL (Pomelo)
-builder.Services.AddDbContext<DbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(finalConnectionString, ServerVersion.AutoDetect(finalConnectionString)));
 
 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -44,14 +43,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-var pass = Environment.GetEnvironmentVariable("MYSQL_PASSWORD") ?? "Não encontrei essa senha!";
-
 app.UseHttpsRedirection();
 
 app.MapGet("/", () =>
 {
 
-    return $"Eu estou funcionando, e direito! StringConnection: {finalConnectionString}";
+    return $"Eu estou funcionando, e direito!";
 });
 
 app.Run();

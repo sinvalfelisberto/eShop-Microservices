@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using eShop.ProductApi.Models;
 
-namespace eShop.ProductApi.Models;
+namespace eShop.ProductApi.Context;
 
 public class AppDbContext : DbContext
 {

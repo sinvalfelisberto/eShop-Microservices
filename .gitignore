@@ -67,3 +67,6 @@ publish/
 
 #environment variables
 .env
+
+# sql files
+dados_mysql/
