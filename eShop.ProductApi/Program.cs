@@ -32,6 +32,7 @@ var finalConnectionString = rawConnectionString?
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(finalConnectionString, ServerVersion.AutoDetect(finalConnectionString)));
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 var app = builder.Build();
