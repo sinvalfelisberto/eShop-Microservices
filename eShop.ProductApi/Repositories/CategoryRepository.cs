@@ -25,7 +25,11 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<Category> GetById(int id)
     {
-        return await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+        var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+        if (category == null)
+            throw new KeyNotFoundException($"Categoria com CategoryId {id} não encontrada!");
+        
+        return category;
     }
 
     public async Task<Category> Create(Category category)

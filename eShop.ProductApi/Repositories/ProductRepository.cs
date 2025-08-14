@@ -18,9 +18,12 @@ public class ProductRepository : IProductRepository
         return await _context.Products.ToListAsync();
     }
 
-    public async Task<Product?> GetById(int id)
+    public async Task<Product> GetById(int id)
     {
-        return await _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
+        var product = await _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
+        if (product == null)
+            throw new KeyNotFoundException($"Produto com ID {id} não encontrado!");
+        return product;
     }
 
     public async Task<Product> Create(Product product)
