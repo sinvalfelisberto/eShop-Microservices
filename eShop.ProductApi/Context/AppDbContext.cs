@@ -21,6 +21,37 @@ public class AppDbContext : DbContext
             .IsRequired();
 
         //product
-        
+        mb.Entity<Product>().HasKey(c => c.Id);
+        mb.Entity<Product>().Property(c => c.Name)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        mb.Entity<Product>().Property(c => c.Description)
+            .HasMaxLength(250)
+            .IsRequired();
+
+        mb.Entity<Product>()
+            .Property(c => c.Price)
+            .HasPrecision(15, 2);
+
+        mb.Entity<Category>()
+            .HasMany(p => p.Products)
+            .WithOne(c => c.Category)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        mb.Entity<Category>()
+            .HasData(
+                new Category
+                {
+                    CategoryId = 1,
+                    Name = "Material Escolar",
+                },
+                new Category
+                {
+                    CategoryId = 2,
+                    Name = "Acessórios",
+                }
+            );
     }
 }
