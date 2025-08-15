@@ -13,17 +13,17 @@ public class CategoryRepository : ICategoryRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Category>> GetAll()
+    public async Task<IEnumerable<Category>> GetAllAsync()
     {
         return await _context.Categories.ToListAsync();
     }
 
-    public async Task<IEnumerable<Category>> GetCategoryProducts()
+    public async Task<IEnumerable<Category>> GetCategoryProductsAsync()
     {
         return await _context.Categories.Include(p => p.Products).ToListAsync();
     }
 
-    public async Task<Category> GetById(int id)
+    public async Task<Category> GetByIdAsync(int id)
     {
         var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
         if (category == null)
@@ -32,23 +32,23 @@ public class CategoryRepository : ICategoryRepository
         return category;
     }
 
-    public async Task<Category> Create(Category category)
+    public async Task<Category> CreateAsync(Category category)
     {
         _context.Categories.Add(category);
         await _context.SaveChangesAsync();
         return category;
     }
 
-    public async Task<Category> Update(Category category)
+    public async Task<Category> UpdateAsync(Category category)
     {
         _context.Entry(category).State = EntityState.Modified;
         await _context.SaveChangesAsync();
         return category;
     }
 
-    public async Task<Category> Delete(int id)
+    public async Task<Category> DeleteAsync(int id)
     {
-        var category = await GetById(id);
+        var category = await GetByIdAsync(id);
         _context.Categories.Remove(category);
         await _context.SaveChangesAsync();
         return category;

@@ -49,7 +49,7 @@ app.UseHttpsRedirection();
 app.MapGet("/", () =>
 {
 
-    return $"Eu estou funcionando, e direito!";
+    return $"Eu estou funcionando, e direito! E com hot reload";
 });
 
 app.Run();

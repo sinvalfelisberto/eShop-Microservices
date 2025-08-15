@@ -4,9 +4,9 @@ namespace eShop.ProductApi.Repositories;
 
 public interface IProductRepository
 {
-    Task<IEnumerable<Product>> GetAll();
-    Task<Product> GetById(int id);
-    Task<Product> Create(Product product);
-    Task<Product> Update(Product product);
-    Task<Product> DeleteById(int id);
+    Task<IEnumerable<Product>> GetAllAsync();
+    Task<Product> GetByIdAsync(int id);
+    Task<Product> CreateAsync(Product product);
+    Task<Product> UpdateAsync(Product product);
+    Task<Product> DeleteByIdAsync(int id);
 }
