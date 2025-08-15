@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using MySqlConnector;
 using eShop.ProductApi.Context;
+using eShop.ProductApi.Repositories;
+using eShop.ProductApi.Services;
 
 Env.Load();
 
@@ -12,6 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -27,12 +35,11 @@ var finalConnectionString = rawConnectionString?
     .Replace("{MYSQL_PASSWORD}", dbPassword)
     .Replace("{MYSQL_HOST}", dbHost)
     .Replace("{MYSQL_PORT}", dbPort);
-
-
+    
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(finalConnectionString, ServerVersion.AutoDetect(finalConnectionString)));
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 
 var app = builder.Build();
