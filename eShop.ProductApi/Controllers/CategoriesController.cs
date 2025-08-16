@@ -42,13 +42,13 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateCategoryAsync([FromBody] CategoryDTO categoryDto)
+    public async Task<ActionResult> CreateCategoryAsync([FromBody] CategoryDTO categoryDTO)
     {
-        if (categoryDto is null)
+        if (categoryDTO is null)
             return BadRequest("Invalid Data!");
 
-        await _categoryService.AddCategoryAsync(categoryDto);
-        return new CreatedAtRouteResult("GetCategory", new { id = categoryDto.CategoryId }, categoryDto);
+        await _categoryService.AddCategoryAsync(categoryDTO);
+        return new CreatedAtRouteResult("GetCategory", new { id = categoryDTO.CategoryId }, categoryDTO);
     }
 
     [HttpPut("{id:int}")]
@@ -61,7 +61,18 @@ public class CategoriesController : ControllerBase
             return BadRequest();
 
         await _categoryService.UpdateCategoryAsync(categoryDTO);
-        
+
+        return Ok(categoryDTO);
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteCategoryAsync(int id)
+    {
+        var categoryDTO = await _categoryService.GetCategoryByIdAsync(id);
+        if (categoryDTO is null)
+            return NotFound("Category not found!");
+
+        await _categoryService.DeleteCategoryAsync(categoryDTO.CategoryId);
         return Ok(categoryDTO);
     }
 }

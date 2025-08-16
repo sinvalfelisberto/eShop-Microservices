@@ -4,6 +4,7 @@ using MySqlConnector;
 using eShop.ProductApi.Context;
 using eShop.ProductApi.Repositories;
 using eShop.ProductApi.Services;
+using System.Text.Json.Serialization;
 
 Env.Load();
 
@@ -11,15 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddControllers()
+    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IProductService, ProductService>();
 
 var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -35,10 +31,19 @@ var finalConnectionString = rawConnectionString?
     .Replace("{MYSQL_PASSWORD}", dbPassword)
     .Replace("{MYSQL_HOST}", dbHost)
     .Replace("{MYSQL_PORT}", dbPort);
+
+
     
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(finalConnectionString, ServerVersion.AutoDetect(finalConnectionString)));
 
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 
@@ -46,18 +51,15 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+  
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", () =>
-{
+app.MapControllers();
 
-    return $"Eu estou funcionando, e direito! E com hot reload";
-});
 
 app.Run();
 

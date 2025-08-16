@@ -27,17 +27,18 @@ public class ProductService : IProductService
         return _mapper.Map<ProductDTO>(product);
     }
 
-    public async Task AddProductAsync(ProductDTO ProductDTO)
+    public async Task AddProductAsync(ProductDTO productDTO)
     {
-        var productEntity = _mapper.Map<Product>(ProductDTO);
+        var productEntity = _mapper.Map<Product>(productDTO);
         await _productRepository.CreateAsync(productEntity);
+        productDTO.Id = productEntity.Id;
     }
 
-    public async Task UpdateProductAsync(ProductDTO ProductDTO)
+    public async Task UpdateProductAsync(ProductDTO productDTO)
     {
-        var productEntity = _mapper.Map<Product>(ProductDTO);
+        var productEntity = _mapper.Map<Product>(productDTO);
         await _productRepository.UpdateAsync(productEntity);
-        ProductDTO.Id = productEntity.Id;
+        productDTO.Id = productEntity.Id;
     }
 
     public async Task DeleteProductAsync(int id)
