@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
-using MySqlConnector;
 using eShop.ProductApi.Context;
 using eShop.ProductApi.Repositories;
 using eShop.ProductApi.Services;

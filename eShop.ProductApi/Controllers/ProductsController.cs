@@ -56,7 +56,7 @@ public class ProductsController : ControllerBase
         return Ok(productDTO);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:int}")] 
     public async Task<ActionResult> DeleteProductAsync(int id)
     {
         var productDTO = await _produtcService.GetProductByIdAsync(id);

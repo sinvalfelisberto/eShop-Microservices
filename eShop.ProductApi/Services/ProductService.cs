@@ -43,7 +43,7 @@ public class ProductService : IProductService
 
     public async Task DeleteProductAsync(int id)
     {
-        var productEntity = _productRepository.GetByIdAsync(id);
+        var productEntity = await _productRepository.GetByIdAsync(id);
         await _productRepository.DeleteByIdAsync(productEntity.Id);
     }
 }

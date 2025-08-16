@@ -49,7 +49,7 @@ public class CategoryService : ICategoryService
 
     public async Task DeleteCategoryAsync(int id)
     {
-        var categoryEntity =  _categoryRepository.GetByIdAsync(id).Result;
+        var categoryEntity = await _categoryRepository.GetByIdAsync(id);
         await _categoryRepository.DeleteAsync(categoryEntity.CategoryId);
     }
 }

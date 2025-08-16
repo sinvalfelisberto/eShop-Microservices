@@ -21,8 +21,6 @@ public class ProductRepository : IProductRepository
     public async Task<Product> GetByIdAsync(int id)
     {
         var product = await _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
-        if (product == null)
-            throw new KeyNotFoundException($"Produto com ID {id} não encontrado!");
         return product;
     }
 

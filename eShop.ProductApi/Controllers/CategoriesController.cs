@@ -73,6 +73,6 @@ public class CategoriesController : ControllerBase
             return NotFound("Category not found!");
 
         await _categoryService.DeleteCategoryAsync(categoryDTO.CategoryId);
-        return Ok(categoryDTO);
+        return Ok(categoryDTO); 
     }
 }

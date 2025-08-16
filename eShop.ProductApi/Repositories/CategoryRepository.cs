@@ -25,10 +25,7 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<Category> GetByIdAsync(int id)
     {
-        var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
-        if (category == null)
-            throw new KeyNotFoundException($"Categoria com CategoryId {id} não encontrada!");
-        
+        var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();        
         return category;
     }
 
@@ -52,5 +49,6 @@ public class CategoryRepository : ICategoryRepository
         _context.Categories.Remove(category);
         await _context.SaveChangesAsync();
         return category;
+
     }
 }
