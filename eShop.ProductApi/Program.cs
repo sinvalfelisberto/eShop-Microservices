@@ -4,6 +4,7 @@ using eShop.ProductApi.Context;
 using eShop.ProductApi.Repositories;
 using eShop.ProductApi.Services;
 using System.Text.Json.Serialization;
+using eShop.ProductApi.DTO.Mappings;
 
 Env.Load();
 
@@ -38,6 +39,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+// builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
